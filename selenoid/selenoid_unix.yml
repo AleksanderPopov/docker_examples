@@ -9,7 +9,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
     ports:
       - "4444:4444"
-      command: -limit 10
+    command: -limit 10 -conf browsers_docker.json
 
   selenoid-ui:
     network_mode: host
