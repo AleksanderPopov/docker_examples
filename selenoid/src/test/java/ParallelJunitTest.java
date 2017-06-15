@@ -5,6 +5,7 @@ import com.codeborne.selenide.WebDriverRunner;
 import org.junit.Test;
 import org.junit.experimental.ParallelComputer;
 import org.junit.runner.JUnitCore;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -27,7 +28,7 @@ public class ParallelJunitTest {
 
   @Test
   public void selenideTest() {
-    Class[] cls = {GoogleSearchTest.class, GoogleSearchTest.class, GoogleSearchTest.class};
+    Class[] cls = {GoogleSearchTest.class, GoogleSearchTest.class, GoogleSearchTest.class, GoogleSearchTest.class};
     JUnitCore.runClasses(new ParallelComputer(true, true), cls);
   }
 
@@ -42,9 +43,12 @@ public class ParallelJunitTest {
 //        DesiredCapabilities ie11 = DesiredCapabilities.internetExplorer();
       Configuration.fastSetValue = true;
       DesiredCapabilities chrome = DesiredCapabilities.chrome();
+      chrome.setBrowserName("wchrome");
+      chrome.setVersion("59.0");
 //        DesiredCapabilities firefox = DesiredCapabilities.firefox();
-      WebDriverRunner.setWebDriver(new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), chrome));
-
+      System.out.println("browser going to start");
+	  WebDriverRunner.setWebDriver(new RemoteWebDriver(new URL("http://test:test-password@172.31.29.77:4444/wd/hub"), chrome));
+		System.out.println("browser started");
       open("http://google.com/ncr");
       search.setValue("Selenium automates browsers").pressEnter();
       results.filter(visible).shouldHaveSize(10)
@@ -53,6 +57,7 @@ public class ParallelJunitTest {
               .find("a")
               .click();
       assertUrl("http://www.seleniumhq.org/");
+      System.out.println(getWebDriver().getTitle());
 
       getWebDriver().quit();
     }
